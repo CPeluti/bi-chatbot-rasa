@@ -36,12 +36,12 @@
 # https://rasa.com/docs/rasa/event-brokers
 event_broker:
   type: pika
-  url: localhost:5672
+  url: localhost
   username: guest
   password: guest
   queues:
-    - queue-1
-  exchange_name: exchange
+    - rasa-q
+  exchange_name: rasa
 
 #event_broker:
 #  url: localhost
