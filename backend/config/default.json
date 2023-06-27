@@ -15,5 +15,13 @@
   },
   "rasa": {
     "addr": "localhost:5005"
+  },
+  "mongodb": "mongodb+srv://admin:admin@cluster0.k7lpe0v.mongodb.net/?retryWrites=true&w=majority",
+  "rabbitmq": {
+    "addr": "localhost:5672",
+    "exchange": "rasa",
+    "queue": "rasa-q",
+    "user":"guest",
+    "password": "guest"
   }
 }

@@ -8,6 +8,8 @@ import { configurationValidator } from './configuration'
 import type { Application } from './declarations'
 import { logError } from './hooks/log-error'
 import { mysql } from './mysql'
+import { mongodb } from './mongodb'
+import { rabbitmq } from './rabbitmq'
 import { services } from './services/index'
 import { channels } from './channels'
 
@@ -34,6 +36,8 @@ app.configure(
 )
 app.configure(channels)
 app.configure(mysql)
+app.configure(mongodb)
+app.configure(rabbitmq)
 app.configure(services)
 
 // Register hooks that run on all service methods

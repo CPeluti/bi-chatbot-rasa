@@ -1,24 +1,24 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 
+import { stringify } from 'querystring'
 import type { Application } from '../../declarations'
-import { MessageService, getOptions } from './message.class'
+import { ConsumerService, getOptions, Message } from './consumer.class'
 
-export const messagePath = 'message'
-export const messageMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
+export const consumerPath = 'consumer'
+export const consumerMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
 
-export * from './message.class'
-
+export * from './consumer.class'
 // A configure function that registers the service and its hooks via `app.configure`
-export const message = (app: Application) => {
+export const consumer = (app: Application) => {
   // Register our service on the Feathers application
-  app.use(messagePath, new MessageService(getOptions(app)), {
+  app.use(consumerPath, new ConsumerService(getOptions(app), app), {
     // A list of all methods this service exposes externally
-    methods: messageMethods,
+    methods: consumerMethods,
     // You can add additional custom events to be sent to clients here
     events: []
   })
   // Initialize hooks
-  app.service(messagePath).hooks({
+  app.service(consumerPath).hooks({
     around: {
       all: []
     },
@@ -31,7 +31,15 @@ export const message = (app: Application) => {
       remove: []
     },
     after: {
-      all: []
+      all: [],
+      create: [(context)=>{
+        if(context.result && Array.isArray(context.result)){
+          // console.log(context.result)
+          context.result.forEach((element: Message) => {
+            context.app.service('messages').create(element)
+          });
+        }
+      }]
     },
     error: {
       all: []
@@ -42,6 +50,6 @@ export const message = (app: Application) => {
 // Add this service to the service type index
 declare module '../../declarations' {
   interface ServiceTypes {
-    [messagePath]: MessageService
+    [consumerPath]: ConsumerService
   }
 }
