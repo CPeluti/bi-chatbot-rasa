@@ -2,12 +2,17 @@
 import { HookContext as FeathersHookContext, NextFunction } from '@feathersjs/feathers'
 import { Application as FeathersApplication } from '@feathersjs/koa'
 import { ApplicationConfiguration } from './configuration'
+import {Channel} from 'amqplib'
+
 
 export { NextFunction }
 
 // The types for app.get(name) and app.set(name)
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Configuration extends ApplicationConfiguration {}
+export interface Configuration extends ApplicationConfiguration {
+    rabbitmq: Record<string, string> 
+    rabbitmqClient: Channel
+}
 
 // A mapping of service names to types. Will be extended in service files.
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
