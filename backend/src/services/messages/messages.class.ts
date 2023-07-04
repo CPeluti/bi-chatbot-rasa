@@ -20,7 +20,6 @@ export class MessagesService<ServiceParams extends Params = MessagesParams> exte
 
 export const getOptions = (app: Application): MongoDBAdapterOptions => {
   return {
-    paginate: app.get('paginate'),
     Model: app.get('mongodbClient').then((db) => db.collection('messages'))
   }
 }

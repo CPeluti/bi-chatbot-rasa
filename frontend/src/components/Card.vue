@@ -1,7 +1,7 @@
 <script setup lang="ts">
     defineProps<{
         titulo:string
-        dado:string 
+        dado:number 
     }>()
 </script>
 

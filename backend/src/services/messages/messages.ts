@@ -15,6 +15,7 @@ import {
 
 import type { Application } from '../../declarations'
 import { MessagesService, getOptions } from './messages.class'
+import { Message } from '../consumer/consumer.class'
 
 export const messagesPath = 'messages'
 export const messagesMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
@@ -57,7 +58,23 @@ export const messages = (app: Application) => {
       remove: []
     },
     after: {
-      all: []
+      all: [],
+      find: [(context)=>{
+        const messages: Message[] = context.result
+        const intents: Record<string,number> = {}
+        const user_intents: Record<string,number> = {}
+        const bot_intents: Record<string,number> = {}
+        const addOrInsert = (obj: Record<string,number>, attr: string) =>{
+          (attr in obj? obj[attr]++ : obj[attr]=1)
+        }
+        messages.forEach((message: Message)=>{
+          addOrInsert(intents, message.intent)
+          message.event == 'bot' ? addOrInsert(bot_intents, message.intent) : addOrInsert(user_intents, message.intent)
+        })
+        const res = {intents, bot_intents, user_intents}
+        context.result = res;
+        return context
+      }]
     },
     error: {
       all: []
